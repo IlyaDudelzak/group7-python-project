@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if contacts %}
+<ul>
+    {% for contact in contacts %}
+    <li style="margin-bottom:16px;">
+        <strong>{{ contact.first_name }} {{ contact.last_name }}</strong><br>
+        📞 {{ contact.phone_number }}&nbsp;&nbsp;
+        ✉️ {{ contact.email }}&nbsp;&nbsp;
+        📍 {{ contact.address }}&nbsp;&nbsp;
+        🎂 {{ contact.birthday }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Contacts not found.</p>
+{% endif %}
+
+<a style="margin-left:24px;" class="" href="/contacts/create/" role="button">Create Contact</a>
+
+{% endblock %}
