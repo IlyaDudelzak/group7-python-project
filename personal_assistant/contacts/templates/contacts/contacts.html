@@ -3,15 +3,27 @@
 
 {% block content %}
 
+<form method="get" action="" style="margin-bottom: 24px;">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <input type="number" name="days" placeholder="Days to birthday" min="0" value="{{ request.GET.days }}">
+    <button type="submit">Search</button>
+</form>
+
 {% if contacts %}
 <ul>
     {% for contact in contacts %}
-    <li style="margin-bottom:16px;">
+    <li style="margin-bottom:16px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
         <strong>{{ contact.first_name }} {{ contact.last_name }}</strong><br>
         📞 {{ contact.phone_number }}&nbsp;&nbsp;
         ✉️ {{ contact.email }}&nbsp;&nbsp;
         📍 {{ contact.address }}&nbsp;&nbsp;
         🎂 {{ contact.birthday }}
+         </div>
+         <div>
+             <a href="{% url 'contacts:edit' contact.id %}" role="button">Edit</a>
+             <a href="{% url 'contacts:delete' contact.id %}" role="button" class="secondary">Delete</a>
+         </div>
     </li>
     {% endfor %}
 </ul>
@@ -19,6 +31,6 @@
 <p>Contacts not found.</p>
 {% endif %}
 
-<a style="margin-left:24px;" class="" href="/contacts/create/" role="button">Create Contact</a>
+<a style="margin-top:24px;" class="" href="/contacts/create/" role="button">Create Contact</a>
 
 {% endblock %}
