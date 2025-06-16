@@ -11,27 +11,34 @@
 </head>
 <body>
 <main class="container">
-    <h1>Personal Assistant</h1>
+
     <nav>
-        <ul>
-            <li>
-                <a href="/contacts" role="button">CONTACTS</a>
+        <ul style="display: flex; justify-content: space-between; width: 100%; margin-bottom:36px;">
+            <li style="padding-top:0px; padding-bottom:0px">
+                <a href="/" style="text-decoration: none; font-size: 24px;">Personal Assistant</a>
             </li>
-            <li>
-                <a class="" href="" role="button">NOTES</a>
+
+            <li style="padding-top:0px; padding-bottom:0px">
+                <a href="/contacts" style="text-decoration: none; font-size: 16px;">CONTACTS</a>
+            </li>
+            <li style="padding-top:0px; padding-bottom:0px">
+                <a class="" href="" style="text-decoration: none; font-size: 16px;">NOTES</a>
 
             </li>
-            
-
-                    <li><a href="" role="button">Sign Up</a></li>
-                    <li><a href="" role="button">Login</a></li>
-
+            <li style="padding-top:0px; padding-bottom:0px">
+                <ul>
+                    <li style="padding-top:0px; padding-bottom:0px"><a href="" style="text-decoration: none; font-size: 16px;">Sign Up</a></li>
+                    <li style="padding-top:0px; padding-bottom:0px"><a href="" style="text-decoration: none; font-size: 16px;">Login</a></li>
+                </ul>
+            </li>
 
         </ul>
 
     </nav>
 
     {% block content %} {% endblock %}
+
+{% include "news/news.html" %}
 
 </main>
 

@@ -2,11 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm
 from .models import Contact
 from datetime import datetime
+# from ..news.views import news_home
+import feedparser
 
 # Create your views here.
 
-def base_view(request):
-    return render(request, 'base.html')
+# def base_view(request):
+#     # feed = feedparser.parse("http://feeds.bbci.co.uk/news/rss.xml")
+#     # news = feed.entries[:5]
+#     return render(request, 'base.html',news_home(request))
 
 def contacts_view(request):
     query = request.GET.get("q", "")
