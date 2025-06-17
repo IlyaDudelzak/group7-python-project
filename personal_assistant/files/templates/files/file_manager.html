@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Files</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label for="fileInput" style="cursor: pointer; background: #aaa; padding: 8px 12px; border-radius: 4px; display: inline-block;">
+    Choose file (max 50Mb)
+  </label>
+  <input id="fileInput" type="file" name="file" hidden onchange="fileName.textContent = this.files[0]?.name || 'No file chosen'">
+
+  <span id="fileName" style="margin-left: 10px; font-size: 16px;">No file chosen</span>
+
+
+  {% if form.file.errors %}
+    <ul class="errorlist" style="color: red; margin-top: 5px;">
+      {% for error in form.file.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+
+  <br><br>
+  <button type="submit">Upload</button>
+</form>
+
+
+<!--<form method="post" enctype="multipart/form-data">-->
+<!--  {% csrf_token %}-->
+<!--  {{ form.as_p }}-->
+<!--  <button type="submit">Upload</button>-->
+<!--</form>-->
+
+<hr>
+
+<form method="get">
+  <label>Category filter:</label>
+  <select name="category" onchange="this.form.submit()">
+    <option value="">All</option>
+    <option value="image" {% if selected_category == 'image' %}selected{% endif %}>Images</option>
+    <option value="document" {% if selected_category == 'document' %}selected{% endif %}>Documents</option>
+    <option value="video" {% if selected_category == 'video' %}selected{% endif %}>Videos</option>
+    <option value="other" {% if selected_category == 'other' %}selected{% endif %}>Other</option>
+  </select>
+</form>
+
+<ul>
+  {% for file in files %}
+    <li>
+      <a href="{{ file.url }}" target="_blank">{{ file.filename }}</a> — {{ file.category }}
+    </li>
+  {% empty %}
+    <li>No files</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
