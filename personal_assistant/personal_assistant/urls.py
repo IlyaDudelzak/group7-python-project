@@ -24,4 +24,5 @@ urlpatterns = [
     path('contacts/', include('contacts.urls')),
     path('files/', include('files.urls')),
     # path('news/', include('news.urls')),
+    path('users/', include('users.urls')),
 ]

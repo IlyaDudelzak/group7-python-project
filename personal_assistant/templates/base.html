@@ -33,8 +33,11 @@
 
             <li style="padding-top:0px; padding-bottom:0px">
                 <ul>
-                    <li style="padding-top:0px; padding-bottom:0px"><a href="" style="text-decoration: none; font-size: 16px;">Sign Up</a></li>
-                    <li style="padding-top:0px; padding-bottom:0px"><a href="" style="text-decoration: none; font-size: 16px;">Login</a></li>
+                    <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:signup' %}" style="text-decoration: none; font-size: 16px;">Sign Up</a></li>
+                    <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:login' %}" style="text-decoration: none; font-size: 16px;">Login</a></li>
+                    {% if user.is_authenticated %}
+                    <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:logout' %}" style="text-decoration: none; font-size: 16px;">Log Out</a></li>
+                    {% endif %}
                 </ul>
             </li>
 
