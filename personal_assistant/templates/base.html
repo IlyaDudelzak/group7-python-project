@@ -23,8 +23,11 @@
             </li>
             
 
-                    <li><a href="" role="button">Sign Up</a></li>
-                    <li><a href="" role="button">Login</a></li>
+                    <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+                    <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:logout' %}" role="button">Log Out</a></li>
+                    {% endif %}
 
 
         </ul>
