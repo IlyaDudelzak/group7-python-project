@@ -1,3 +1,5 @@
+"""Models for the files app."""
+
 from django.db import models
 
 # Create your models here.
@@ -6,6 +8,15 @@ from django.db import models
 # from django.contrib.auth.models import User
 
 class UploadedFile(models.Model):
+    """
+    Model representing an uploaded file.
+
+    Fields:
+        filename (str): The name of the uploaded file.
+        url (str): The public URL of the uploaded file.
+        uploaded_at (datetime): The date and time the file was uploaded.
+        category (str): The category of the file (image, document, video, other).
+    """
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     filename = models.CharField(max_length=255)
     url = models.TextField()
@@ -18,4 +29,5 @@ class UploadedFile(models.Model):
     ])
 
     def __str__(self):
+        """Return the filename as string representation."""
         return self.filename

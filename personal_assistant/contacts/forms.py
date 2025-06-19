@@ -1,9 +1,23 @@
+"""Forms for the contacts app."""
+
 from django.forms import ModelForm, CharField, EmailField, TextInput
 from phonenumber_field.formfields import PhoneNumberField
 from .models import Contact
 
 
 class ContactForm(ModelForm):
+    """
+    Form for creating and editing Contact instances.
+
+    Fields:
+        first_name: The contact's first name.
+        last_name: The contact's last name.
+        address: The contact's address.
+        email: The contact's email address.
+        phone_number: The contact's phone number.
+        birthday: The contact's birthday.
+    """
+
     first_name = CharField(
         min_length=2,
         max_length=150,

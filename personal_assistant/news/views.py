@@ -1,3 +1,5 @@
+"""Views for the news app."""
+
 from django.shortcuts import render
 import feedparser
 
@@ -20,6 +22,15 @@ NEWS_SOURCES = {
 
 
 def base_view(request):
+    """
+    Display news from selected sources and handle search queries.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered base page with news context.
+    """
     selected_source = request.GET.get("source", "bbc")
     query = request.GET.get("q", "")
 

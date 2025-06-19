@@ -1,3 +1,5 @@
+"""Views for the files app."""
+
 # from django.shortcuts import render
 
 # Create your views here.
@@ -18,6 +20,15 @@ MAX_FILE_SIZE = 50 * 1024 * 1024
 
 # @login_required
 def file_manager(request):
+    """
+    Handle file uploads and display uploaded files with optional category filtering.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered file manager page.
+    """
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():

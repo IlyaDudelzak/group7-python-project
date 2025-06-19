@@ -1,3 +1,5 @@
+"""Views for the contacts app."""
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm
 from .models import Contact
@@ -13,6 +15,15 @@ import feedparser
 #     return render(request, 'base.html',news_home(request))
 
 def contacts_view(request):
+    """
+    Display a list of contacts, with optional search and birthday filtering.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered contacts list page.
+    """
     query = request.GET.get("q", "")
     days_str = request.GET.get("days")
     contacts = Contact.objects.all()
@@ -33,6 +44,15 @@ def contacts_view(request):
     return render(request, "contacts/contacts.html", {"contacts": contacts})
 
 def create_contact(request):
+    """
+    Handle creation of a new contact.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered contact creation form or redirect after creation.
+    """
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -43,6 +63,16 @@ def create_contact(request):
     return render(request, 'contacts/create_contact.html', {'form': form})
 
 def edit_contact(request, pk):
+    """
+    Handle editing of an existing contact.
+
+    Args:
+        request: The HTTP request object.
+        pk (int): Primary key of the contact to edit.
+
+    Returns:
+        HttpResponse: Rendered contact edit form or redirect after saving.
+    """
     contact = get_object_or_404(Contact, pk=pk)
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)
@@ -54,6 +84,16 @@ def edit_contact(request, pk):
     return render(request, 'contacts/edit_contact.html', {'form': form, 'contact': contact})
 
 def delete_contact(request, pk):
+    """
+    Handle deletion of a contact.
+
+    Args:
+        request: The HTTP request object.
+        pk (int): Primary key of the contact to delete.
+
+    Returns:
+        HttpResponse: Rendered confirmation page or redirect after deletion.
+    """
     contact = get_object_or_404(Contact, pk=pk)
     if request.method == 'POST':
         contact.delete()
