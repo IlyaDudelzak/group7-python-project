@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if messages %}
-<div>
+<div style="margin-bottom:16px;">
     {% for message in messages %}
     <div {% if message.tags %} class="alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
     {% endfor %}

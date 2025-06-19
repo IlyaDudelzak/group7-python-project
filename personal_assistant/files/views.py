@@ -1,9 +1,6 @@
-# from django.shortcuts import render
-
-# Create your views here.
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+
 from django.conf import settings
 from supabase import create_client
 from .models import UploadedFile
@@ -12,11 +9,12 @@ from .utils import get_category
 from unidecode import unidecode
 from django.conf import settings
 from storage3.exceptions import StorageApiError
+from django.contrib.auth.decorators import login_required
 
 supabase=create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 MAX_FILE_SIZE = 50 * 1024 * 1024
 
-# @login_required
+@login_required
 def file_manager(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
@@ -27,15 +25,14 @@ def file_manager(request):
             else:
                 try:
                     file_bytes = f.read()
-                    # path = f.name  # или f"user_{request.user.id}/{f.name}"
-                    path=unidecode(f.name)
+                    # path = unidecode(f.name)
+                    path = f"user_{request.user.id}/{unidecode(f.name)}"
 
                     supabase.storage.from_("group7-bucket").upload(path, file_bytes)
-
                     public_url = supabase.storage.from_("group7-bucket").get_public_url(path)
 
                     UploadedFile.objects.create(
-                        # user=request.user,
+                        user=request.user,
                         filename=f.name,
                         url=public_url,
                         category=get_category(f.name)
@@ -47,7 +44,8 @@ def file_manager(request):
         form = UploadFileForm()
 
     category = request.GET.get("category")
-    files = UploadedFile.objects.all()
+
+    files = UploadedFile.objects.filter(user=request.user)
     if category:
         files = files.filter(category=category)
 

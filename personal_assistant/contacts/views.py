@@ -2,48 +2,57 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm
 from .models import Contact
 from datetime import datetime
-# from ..news.views import news_home
-import feedparser
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-# def base_view(request):
-#     # feed = feedparser.parse("http://feeds.bbci.co.uk/news/rss.xml")
-#     # news = feed.entries[:5]
-#     return render(request, 'base.html',news_home(request))
-
+@login_required
 def contacts_view(request):
     query = request.GET.get("q", "")
     days_str = request.GET.get("days")
-    contacts = Contact.objects.all()
+
+    contacts = Contact.objects.filter(user=request.user)
+
     if query:
         contacts = contacts.filter(first_name__icontains=query)
+
     if days_str and days_str.isdigit():
         days = int(days_str)
         today = datetime.today().date()
         upcoming_birthdays_list = []
+
         for contact in contacts:
             if contact.birthday:
-                birthday_this_year = datetime.strptime(contact.birthday, "%Y-%m-%d").date().replace(year=today.year)
+                birthday_this_year = contact.birthday.replace(year=today.year)
+                # birthday_this_year = datetime.strptime(contact.birthday, "%Y-%m-%d").date().replace(year=today.year)
                 if birthday_this_year < today:
                     birthday_this_year = birthday_this_year.replace(year=today.year + 1)
                 if 0 <= (birthday_this_year - today).days <= days:
                     upcoming_birthdays_list.append(contact)
-        contacts=upcoming_birthdays_list
+
+        contacts = upcoming_birthdays_list
+
     return render(request, "contacts/contacts.html", {"contacts": contacts})
 
+
+@login_required
 def create_contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            contact = form.save(commit=False)  # 👈 не сохраняем сразу
+            contact.user = request.user       # 👈 устанавливаем пользователя
+            contact.save()                    # 👈 теперь сохраняем
             return redirect('contacts:contact_view')
     else:
         form = ContactForm()
     return render(request, 'contacts/create_contact.html', {'form': form})
 
-def edit_contact(request, pk):
-    contact = get_object_or_404(Contact, pk=pk)
+
+@login_required
+def edit_contact(request, contact_id):
+    contact = get_object_or_404(Contact, id=contact_id, user=request.user)  # 👈 фильтр по user
+
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)
         if form.is_valid():
@@ -51,10 +60,12 @@ def edit_contact(request, pk):
             return redirect('contacts:contact_view')
     else:
         form = ContactForm(instance=contact)
-    return render(request, 'contacts/edit_contact.html', {'form': form, 'contact': contact})
+    return render(request, 'contacts/edit_contact.html', {'form': form})
 
-def delete_contact(request, pk):
-    contact = get_object_or_404(Contact, pk=pk)
+
+@login_required
+def delete_contact(request, contact_id):
+    contact = get_object_or_404(Contact, id=contact_id, user=request.user)  # 👈 защита
     if request.method == 'POST':
         contact.delete()
         return redirect('contacts:contact_view')

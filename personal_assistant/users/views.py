@@ -17,7 +17,9 @@ def signup(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(to="contacts:contact_view")
+            messages.success(request, "Account successfully created! You can now log in.")
+            return redirect('users:login')
+            # return redirect(to="contacts:contact_view")
         else:
             return render(request, "users/signup.html", context={"form": form})
 
@@ -45,7 +47,8 @@ def loginuser(request):
 @login_required
 def logoutuser(request):
     logout(request)
-    return redirect(to="contacts:contact_view")
+    return redirect("base")
+    # return redirect(to="contacts:contact_view")
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):

@@ -20,7 +20,7 @@ from news.views import base_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', base_view),
+    path('', base_view, name='base'),
     path('contacts/', include('contacts.urls')),
     path('files/', include('files.urls')),
     # path('news/', include('news.urls')),

@@ -18,6 +18,8 @@
                 <a href="/" style="text-decoration: none; font-size: 24px;">Personal Assistant</a>
             </li>
 
+            {% if user.is_authenticated %}
+
             <li style="padding-top:0px; padding-bottom:0px">
                 <a href="/contacts" style="text-decoration: none; font-size: 16px;">Contacts</a>
             </li>
@@ -31,10 +33,14 @@
 
             </li>
 
+            {% endif %}
+
             <li style="padding-top:0px; padding-bottom:0px">
                 <ul>
+                    {% if not user.is_authenticated %}
                     <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:signup' %}" style="text-decoration: none; font-size: 16px;">Sign Up</a></li>
                     <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:login' %}" style="text-decoration: none; font-size: 16px;">Login</a></li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                     <li style="padding-top:0px; padding-bottom:0px"><a href="{% url 'users:logout' %}" style="text-decoration: none; font-size: 16px;">Log Out</a></li>
                     {% endif %}
