@@ -1,4 +1,4 @@
-from django.forms import ModelForm, CharField, EmailField, TextInput
+from django.forms import ModelForm, CharField, EmailField, TextInput, DateField, DateInput
 from phonenumber_field.formfields import PhoneNumberField
 from .models import Contact
 
@@ -26,11 +26,18 @@ class ContactForm(ModelForm):
         required=True,
         widget=TextInput(attrs={'placeholder': '+380xxxxxxxxx'})
     )
-    birthday = CharField(
-        max_length=50,
+    # birthday = CharField(
+    #     max_length=50,
+    #     required=False,
+    #     widget=TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+    # )
+
+    birthday = DateField(
         required=False,
-        widget=TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+        widget=DateInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+        input_formats=['%Y-%m-%d']
     )
+
 
     class Meta:
         model = Contact

@@ -40,9 +40,9 @@ def create_contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            contact = form.save(commit=False)  # 👈 не сохраняем сразу
-            contact.user = request.user       # 👈 устанавливаем пользователя
-            contact.save()                    # 👈 теперь сохраняем
+            contact = form.save(commit=False)
+            contact.user = request.user
+            contact.save()
             return redirect('contacts:contact_view')
     else:
         form = ContactForm()
@@ -51,7 +51,7 @@ def create_contact(request):
 
 @login_required
 def edit_contact(request, contact_id):
-    contact = get_object_or_404(Contact, id=contact_id, user=request.user)  # 👈 фильтр по user
+    contact = get_object_or_404(Contact, id=contact_id, user=request.user)
 
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)
@@ -65,7 +65,7 @@ def edit_contact(request, contact_id):
 
 @login_required
 def delete_contact(request, contact_id):
-    contact = get_object_or_404(Contact, id=contact_id, user=request.user)  # 👈 защита
+    contact = get_object_or_404(Contact, id=contact_id, user=request.user)
     if request.method == 'POST':
         contact.delete()
         return redirect('contacts:contact_view')
