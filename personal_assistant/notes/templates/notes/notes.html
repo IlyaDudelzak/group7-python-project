@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+        <ul>
+            <li><a href="{% url 'notes:note' %}" role="button">Add note</a></li>
+            <li><a href="{% url 'notes:tag' %}" role="button">Add Tag</a></li>
+        </ul>
+    </nav>
+
+<form method="get" action="" style="margin-bottom: 24px;">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <input type="text" name="tag" placeholder="Search by tag" value="{{ request.GET.tag }}">
+    <button type="submit">Search</button>
+</form>
+    {% if notes %}
+    {% for note in notes %}
+    <ul >
+        <li style="margin-bottom:16px; display: flex; justify-content: space-between; align-items: center;">
+
+            <a href="{% url 'notes:detail' note.id %}" class="outline"> {{ note.name }}   (tags:
+  {% for tag in note.tags.all %}
+    {{ tag.name }}{% if not forloop.last %}, {% endif %}
+  {% endfor %})</a>
+            <div>
+            <a href="{% url 'notes:edit' note.id %}" role="button">Edit</a>
+            <a href="{% url 'notes:delete' note.id %}" role="button" class="contrast">Delete</a>
+            </div>
+
+        </li>
+    </ul>
+{% endfor %}
+    {% else %}
+<p>Notes not found.</p>
+    {% endif %}
+
+
+{% endblock %}
