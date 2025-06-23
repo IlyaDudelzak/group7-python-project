@@ -1,6 +1,7 @@
 services:
   web:
     image: xraibackx/personal_assistant
+    platform: linux/amd64
     ports:
       - "8000:8000"
     env_file:
@@ -10,6 +11,7 @@ services:
 
   postgres:
     image: postgres:latest
+    platform: linux/amd64
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
