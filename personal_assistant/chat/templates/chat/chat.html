@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-container">
+    <h2>AI Chat</h2>
+    
+    <div id="chat-messages" class="chat-messages">
+        {% for message in messages %}
+            <div class="message {% if message.role == 'assistant' %}assistant{% else %}user{% endif %}">
+                <strong>{{ message.role|title }}:</strong>
+                <p>{{ message.content }}</p>
+                <small>{{ message.timestamp|date:'Y-m-d H:i:s' }}</small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="chat-form" class="chat-form">
+        {% csrf_token %}
+        <textarea name="message" placeholder="Type your message..." required></textarea>
+        
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<style>
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.chat-messages {
+    height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.user {
+    background-color: #e3f2fd;
+    margin-left: 20%;
+}
+
+.message.assistant {
+    background-color: #f5f5f5;
+    margin-right: 20%;
+}
+
+.chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-form textarea {
+    flex: none;
+    height: 60px;
+    resize: none;
+}
+</style>
+
+<script>
+document.getElementById('chat-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const textarea = form.querySelector('textarea');
+    const message = textarea.value;
+    const messagesDiv = document.getElementById('chat-messages');
+    
+    // Clear textarea
+    textarea.value = '';
+    
+    // Add user message immediately
+    messagesDiv.innerHTML += `
+        <div class="message user">
+            <strong>User:</strong>
+            <p>${message}</p>
+            <small>${new Date().toLocaleString()}</small>
+        </div>
+    `;
+    
+    // Scroll to bottom
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    try {
+        const response = await fetch('/chat/send/', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Add assistant message
+            messagesDiv.innerHTML += `
+                <div class="message assistant">
+                    <strong>Assistant:</strong>
+                    <p>${data.message}</p>
+                    <small>${new Date(data.timestamp).toLocaleString()}</small>
+                </div>
+            `;
+            
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        } else {
+            alert(data.error || 'An error occurred');
+        }
+    } catch (err) {
+        alert('Failed to send message');
+        console.error(err);
+    }
+});</script>
+{% endblock %}

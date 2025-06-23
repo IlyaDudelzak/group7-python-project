@@ -23,5 +23,6 @@ urlpatterns = [
     path('', base_view),
     path('contacts/', include('contacts.urls')),
     path('files/', include('files.urls')),
+    path('chat/', include('chat.urls')),
     # path('news/', include('news.urls')),
 ]

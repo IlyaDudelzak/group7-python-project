@@ -6,16 +6,15 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from supabase import create_client
+from django.core.files.storage import FileSystemStorage
 from .models import UploadedFile
 from .forms import UploadFileForm
 from .utils import get_category
 from unidecode import unidecode
 from django.conf import settings
-from storage3.exceptions import StorageApiError
 
-supabase=create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+# Removed Supabase client creation
+file_storage = FileSystemStorage()
 MAX_FILE_SIZE = 50 * 1024 * 1024
 
 # @login_required
@@ -41,9 +40,11 @@ def file_manager(request):
                     # path = f.name  # или f"user_{request.user.id}/{f.name}"
                     path=unidecode(f.name)
 
-                    supabase.storage.from_("group7-bucket").upload(path, file_bytes)
+                    # Removed Supabase upload logic
+                    file_storage.save(path, file_bytes)
 
-                    public_url = supabase.storage.from_("group7-bucket").get_public_url(path)
+                    # Replaced with Django's FileSystemStorage public URL logic
+                    public_url = file_storage.url(path)
 
                     UploadedFile.objects.create(
                         # user=request.user,
@@ -52,8 +53,8 @@ def file_manager(request):
                         category=get_category(f.name)
                     )
                     return redirect("file-manager")
-                except StorageApiError as e:
-                    form.add_error("file", f"Upload failed: {e.message}")
+                except Exception as e:
+                    form.add_error("file", f"Upload failed: {str(e)}")
     else:
         form = UploadFileForm()
 
