@@ -14,11 +14,19 @@
         {% endfor %}
     </div>
 
-    <form id="chat-form" class="chat-form">
+    <form method="POST" action="{{request.path}}">
         {% csrf_token %}
-        <textarea name="message" placeholder="Type your message..." required></textarea>
-        
-        <button type="submit">Send</button>
+        {{ form }}
+        <div class="grid">
+            <button type="submit">Submit</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+    </form>
+
+    <!-- Added form for the clear chat button -->
+    <form method="POST" action="{{ request.path }}">
+        {% csrf_token %}
+        <button type="submit" name="clear_chat" class="secondary">Clear Chat</button>
     </form>
 </div>
 
@@ -67,58 +75,11 @@
 </style>
 
 <script>
-document.getElementById('chat-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const form = e.target;
-    const textarea = form.querySelector('textarea');
-    const message = textarea.value;
+/* Added script to scroll to the bottom of the chat messages when the page is loaded */
+window.onload = function() {
     const messagesDiv = document.getElementById('chat-messages');
-    
-    // Clear textarea
-    textarea.value = '';
-    
-    // Add user message immediately
-    messagesDiv.innerHTML += `
-        <div class="message user">
-            <strong>User:</strong>
-            <p>${message}</p>
-            <small>${new Date().toLocaleString()}</small>
-        </div>
-    `;
-    
-    // Scroll to bottom
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    
-    try {
-        const response = await fetch('/chat/send/', {
-            method: 'POST',
-            body: new FormData(form),
-            headers: {
-                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
-            }
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            // Add assistant message
-            messagesDiv.innerHTML += `
-                <div class="message assistant">
-                    <strong>Assistant:</strong>
-                    <p>${data.message}</p>
-                    <small>${new Date(data.timestamp).toLocaleString()}</small>
-                </div>
-            `;
-            
-            // Scroll to bottom
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        } else {
-            alert(data.error || 'An error occurred');
-        }
-    } catch (err) {
-        alert('Failed to send message');
-        console.error(err);
-    }
-});</script>
+};
+</script>
+
 {% endblock %}
