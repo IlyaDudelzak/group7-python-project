@@ -5,7 +5,10 @@ import sys
 
 
 def main():
-    """Run administrative tasks."""
+    """
+    Run administrative tasks for the Django project.
+    Sets the default settings module and executes commands from the command line.
+    """
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'personal_assistant.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -19,4 +22,8 @@ def main():
 
 
 if __name__ == '__main__':
+    """
+    Entry point for the Django management script.
+    Calls the main() function to handle command-line tasks.
+    """
     main()

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-container">
+    <h2>AI Chat</h2>
+    
+    <div id="chat-messages" class="chat-messages">
+        {% for message in messages %}
+            <div class="message {% if message.role == 'assistant' %}assistant{% else %}user{% endif %}">
+                <strong>{{ message.role|title }}:</strong>
+                <p>{{ message.content }}</p>
+                <small>{{ message.timestamp|date:'Y-m-d H:i:s' }}</small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="POST" action="{{request.path}}">
+        {% csrf_token %}
+        {{ form }}
+        <div class="grid">
+            <button type="submit">Submit</button>
+            <button type="reset" class="secondary">Reset</button>
+        </div>
+    </form>
+
+    <!-- Added form for the clear chat button -->
+    <form method="POST" action="{{ request.path }}">
+        {% csrf_token %}
+        <button type="submit" name="clear_chat" class="secondary">Clear Chat</button>
+    </form>
+</div>
+
+<style>
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.chat-messages {
+    height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.user {
+    background-color: #e3f2fd;
+    margin-left: 20%;
+}
+
+.message.assistant {
+    background-color: #f5f5f5;
+    margin-right: 20%;
+}
+
+.chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-form textarea {
+    flex: none;
+    height: 60px;
+    resize: none;
+}
+</style>
+
+<script>
+/* Added script to scroll to the bottom of the chat messages when the page is loaded */
+window.onload = function() {
+    const messagesDiv = document.getElementById('chat-messages');
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+};
+</script>
+
+{% endblock %}
