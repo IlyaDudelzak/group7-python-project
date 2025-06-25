@@ -40,11 +40,12 @@ def chat_view(request):
             )
 
             # Fetch personal data
-            personal_data = Contact.objects.values('first_name', 'last_name', 'address', 'email', 'phone_number', 'birthday')
+            contacts = Contact.objects.values('first_name', 'last_name', 'address', 'email', 'phone_number', 'birthday')
+
 
             # Prepare Gemini request
             response = model.generate_content(user_message, context={
-                'personal_data': list(personal_data)
+                'contacts': list(contacts)
             })
 
             # Save assistant message
