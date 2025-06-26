@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
-from .forms import EventForm
+from .forms import EventForm, RecurringEventForm
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 
@@ -12,30 +12,56 @@ def calendar_view(request):
 @login_required
 def add_event(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event = form.save(commit=False)
+        event_form = EventForm(request.POST)
+        recurring_form = RecurringEventForm(request.POST)
+
+        if event_form.is_valid():
+            event = event_form.save(commit=False)
             event.user = request.user
-            event.save()
 
             if event.is_recurring:
-                date = event.recurrence_start
-                while date <= event.recurrence_end:
-                    if date.weekday() == event.date.weekday() and date != event.date:
+                if recurring_form.is_valid():
+                    start = recurring_form.cleaned_data['recurrence_start']
+                    end = recurring_form.cleaned_data['recurrence_end']
+
+                    event.date = start
+                    event.recurrence_start = start
+                    event.recurrence_end = end
+                    event.save()
+
+                    current_date = start + timedelta(days=7)
+                    while current_date <= end:
                         Event.objects.create(
-                            user=request.user,
                             title=event.title,
                             location=event.location,
-                            date=date,
+                            date=current_date,
                             time=event.time,
-                            is_recurring=False
+                            is_recurring=True,
+                            recurrence_start=start,
+                            recurrence_end=end,
+                            user=request.user,
                         )
-                    date += timedelta(days=1)
+                        current_date += timedelta(days=7)
 
-            return redirect('calendar:calendar_view')
+                    return redirect('calendar:calendar_view')
+                else:
+                    return render(request, 'diary/add_event.html', {
+                        'event_form': event_form,
+                        'recurring_form': recurring_form
+                    })
+
+            else:
+                event.save()
+                return redirect('calendar:calendar_view')
+
     else:
-        form = EventForm()
-    return render(request, 'diary/event_form.html', {'form': form})
+        event_form = EventForm()
+        recurring_form = RecurringEventForm()
+
+    return render(request, 'diary/add_event.html', {
+        'event_form': event_form,
+        'recurring_form': recurring_form
+    })
 
 @login_required
 def delete_event(request, pk):
