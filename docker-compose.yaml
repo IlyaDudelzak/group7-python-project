@@ -5,16 +5,16 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3245:3245"
+      - "8002:8002"
     restart: always
     env_file:
       - .env
     depends_on:
       - db
-    command: ["./scripts/wait_for_db.sh", "db", "gunicorn", "personal_assistant.wsgi:application", "--bind", "0.0.0.0:3245"]
+    command: ["/app/scripts/wait_for_db.sh", "db", "gunicorn", "personal_assistant.wsgi:application", "--bind", "0.0.0.0:8002"]
 
   db:
-    image: postgres:14
+    image: postgres:latest
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
