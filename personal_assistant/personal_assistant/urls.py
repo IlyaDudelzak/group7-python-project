@@ -26,4 +26,5 @@ urlpatterns = [
     # path('news/', include('personal_assistant.news.urls')),
     path('users/', include('personal_assistant.users.urls')),
     path('notes/', include('personal_assistant.notes.urls')),
+    path('chat/', include('personal_assistant.chat.urls')),
 ]
