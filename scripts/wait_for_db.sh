@@ -9,8 +9,8 @@ until pg_isready -h "$host" -p 5432; do
   sleep 1
 done
 
-python3 personal_assistant/manage.py makemigrations
-python3 personal_assistant/manage.py migrate
+python3 /app/personal_assistant/manage.py makemigrations
+python3 /app/personal_assistant/manage.py migrate
 
 >&2 echo "Postgres is up - executing command"
 exec "$@"

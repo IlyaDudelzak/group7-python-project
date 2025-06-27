@@ -16,5 +16,6 @@ RUN poetry config virtualenvs.create false \
 COPY ./scripts /app/scripts
 RUN chmod +x /app/scripts/wait_for_db.sh
 COPY ./personal_assistant /app/personal_assistant
+WORKDIR /app/personal_assistant
 ENV PYTHONPATH=/app
-CMD ["gunicorn", "personal_assistant.personal_assistant.wsgi:application", "--bind", "0.0.0.0:8002", "--workers", "3", "--timeout", "120"]
+CMD ["gunicorn", "personal_assistant.wsgi:application", "--bind", "0.0.0.0:8002", "--workers", "3", "--timeout", "120"]

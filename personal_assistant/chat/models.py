@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 
 class ChatMessage(models.Model):
@@ -16,6 +17,8 @@ class ChatMessage(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     content = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    device_key = models.CharField(max_length=64, null=True, blank=True)
 
     class Meta:
         ordering = ['timestamp']

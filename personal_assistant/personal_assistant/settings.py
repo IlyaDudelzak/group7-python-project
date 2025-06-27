@@ -41,13 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'personal_assistant.contacts',
-    'personal_assistant.notes',
-    'personal_assistant.users',
-    'personal_assistant.news',
-    'personal_assistant.files',
-    'personal_assistant.chat',
-    'personal_assistant.diary'
+    'contacts',
+    'notes',
+    'users',
+    'news',
+    'files',
+    'chat',
+    'diary'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-ROOT_URLCONF = 'personal_assistant.personal_assistant.urls'
+ROOT_URLCONF = 'personal_assistant.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'personal_assistant.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database

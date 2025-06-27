@@ -3,8 +3,7 @@ services:
   web:
     build: .
     volumes:
-      - ./personal_assistant:/app/personal_assistant
-      - ./scripts:/app/scripts
+      - ./:/app
     ports:
       - "8002:8002"
     restart: always
@@ -14,7 +13,7 @@ services:
       - PYTHONPATH=/app
     depends_on:
       - db
-    command: ["/app/scripts/wait_for_db.sh", "${DB_HOST}", "gunicorn", "personal_assistant.personal_assistant.wsgi:application", "--bind", "0.0.0.0:8002"]
+    command: ["/app/scripts/wait_for_db.sh", "${DB_HOST}", "gunicorn", "personal_assistant.wsgi:application", "--bind", "0.0.0.0:8002"]
 
   db:
     image: postgres:latest
