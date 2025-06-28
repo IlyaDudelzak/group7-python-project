@@ -1,4 +1,6 @@
-"""Views for the chat application."""
+"""
+Views for the chat application.
+"""
 
 from django.shortcuts import render
 from django.http import JsonResponse

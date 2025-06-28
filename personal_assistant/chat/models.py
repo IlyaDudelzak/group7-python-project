@@ -1,4 +1,6 @@
-"""Models for the chat application."""
+"""
+Models for the chat application.
+"""
 
 from django.db import models
 from django.utils import timezone
@@ -6,9 +8,8 @@ from django.conf import settings
 
 
 class ChatMessage(models.Model):
-    """
-    Model to store chat messages between user and AI.
-    """
+    """Model to store chat messages between user and AI."""
+
     ROLE_CHOICES = [
         ('user', 'User'),
         ('assistant', 'Assistant'),
