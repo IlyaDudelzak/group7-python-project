@@ -39,6 +39,9 @@ This project is a web application developed using Django. It allows users to man
    docker-compose up --build -d
    ```
 
+Note:
+ if you are seeing "exec /app/scripts/wait_for_db.sh: no such file or directory" error change encoding of scripts/wait_for_db.sh from CRLF to LF
+
 ## Contributing
 
 Contributions are welcome! Please open issues or submit pull requests for improvements.
