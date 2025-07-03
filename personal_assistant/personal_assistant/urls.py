@@ -25,9 +25,10 @@ urlpatterns = [
     path('', base_view, name='base'),
     path('contacts/', include('contacts.urls')),
     path('files/', include('files.urls')),
-    # path('news/', include('news.urls')),
+    path('news/', include('news.urls')),
     path('users/', include('users.urls')),
     path('notes/', include('notes.urls')),
+    path('chat/', include('chat.urls')),
     path('calendar/', include('diary.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

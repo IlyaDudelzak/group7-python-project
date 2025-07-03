@@ -34,33 +34,10 @@ This project is a web application developed using Django. It allows users to man
    ```bash
    cd group7-python-project
    ```
-3. Install Poetry if you haven't already:
+3. Start the project using Docker Compose:
    ```bash
-   pip install poetry
+   docker-compose up --build -d
    ```
-4. Install dependencies using Poetry:
-    ```bash
-    poetry install
-    ```
-5. Set up PostgreSQL database.
-   ```bash
-   docker compose up -d
-   ```
-6. Navigate to the project directory:
-   ```bash
-   cd personal_assistant
-   ```
-7. Apply migrations:
-   ```bash
-   python manage.py migrate
-   ```
-
-## Usage
-
-To start the development server, run:
-```bash
-python manage.py runserver
-```
 
 ## Contributing
 
